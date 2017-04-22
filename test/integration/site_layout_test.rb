@@ -3,7 +3,7 @@ require 'test_helper'
 class SiteLayoutTest < ActionDispatch::IntegrationTest
   
   def setup
-    #get root_path
+    get root_path
   end
 
   test "home page" do
