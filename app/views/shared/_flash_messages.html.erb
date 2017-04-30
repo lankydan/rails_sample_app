@@ -1,0 +1,7 @@
+<% flash.each do |messageType, message| %>
+  <!--<div class="alert alert-<%= messageType %>">
+    <%= message %>
+  </div>-->
+  <!--could be written into a helper method using the code below!-->
+  <%= content_tag(:div, message, class: "alert alert-#{messageType}") %>
+<% end %>

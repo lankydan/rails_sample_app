@@ -1,5 +1,25 @@
 $light-grey: #777;
 $hover-blue: #0275d8;
+@mixin box_sizing {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+@mixin center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.debug_dump {
+    clear: both;
+    float: left;
+    width: 100%;
+    margin-top: 45px;
+    @include box_sizing;
+}
+
 section {
     overflow: auto;
 }
@@ -91,5 +111,74 @@ p {
     }
     li+li {
         margin-left: 1rem
+    }
+}
+
+aside {
+    section.user_info {
+        margin-top: 20px;
+    }
+}
+
+section {
+    padding: 10px 0;
+    margin-top: 20px;
+    &:first-child {
+        border: 0;
+        padding-top: 0;
+    }
+    span {
+        display: block;
+        margin-bottom: 3px;
+        line-height: 1;
+    }
+    h1 {
+        font-size: 1.4em;
+        text-align: left;
+        letter-spacing: -1px;
+        margin-bottom: 3px;
+        margin-top: 0px;
+    }
+}
+
+.gravatar {
+    float: left;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+.gravatar_edit {
+    margin-top: 15px;
+}
+
+input, textarea, select, .uneditable-input {
+    border: 1px solid #bbb;
+    width: 100%;
+    margin-bottom: 15px;
+    @include box_sizing;
+}
+
+input {
+    height: auto !important;
+}
+
+.center_form {
+    @include center-block;
+}
+
+// # (hash) means id in CSS
+#error_explanation {
+    color: red;
+    ul {
+        // color: red;
+        margin: 0 0 30px 0;
+    }
+}
+
+.field_with_errors {
+    // extends bootstraps has-danger class
+    @extend .has-danger;
+    .form-control {
+        color: $state-danger-text;
     }
 }
