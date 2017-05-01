@@ -1,7 +1,7 @@
 require 'test_helper'
 # tests signup page for correct validation
 class UsersSignupTest < ActionDispatch::IntegrationTest
-  
+
   test "valid signup information" do
     get signup_path
     assert_difference "User.count" do
@@ -30,6 +30,16 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_select "div.alert", count: 1
     assert_select "div.alert-success", "Welcome to the Sample App!", count: 1
     end
+  end
+
+  test "valid signup user logged in" do
+    get signup_path
+    post signup_path, params: { user: { name:"Dan",
+                                          email: "user@valid.com",
+                                          password: "password",
+                                          password_confirmation: "password"
+                                        } }
+    assert is_logged_in?
   end
 
   test "invalid signup information" do

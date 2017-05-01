@@ -5,20 +5,28 @@
     <span class="navbar-toggler-icon"></span>
   </button>
         <%= link_to  "My Application", root_path, class: "navbar-brand", id: "logo" %>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <%= link_to  "Home", root_path, class: "nav-link" %>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><%= link_to  "Home", root_path, class: "nav-link" %></li>
+                <li class="nav-item"><%= link_to  "Help", help_path, class: "nav-link" %></li>
+                <li class="nav-item"><%= link_to  "About", about_path, class: "nav-link" %></li>
+                 <% if logged_in? %>
+                    <li class="nav-item"><%= link_to  "Users", "#", class: "nav-link" %></li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" id="accountDropdownMenuButton">
+                            Account
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="accountDropdownMenuButton">
+                            <%= link_to  "Profile", current_user, class: "dropdown-item" %>
+                            <%= link_to  "Settings", "#", class: "dropdown-item" %>
+                            <div class="dropdown-divider"></div>
+                            <%= link_to  "Log out", logout_path, method: "delete", class: "dropdown-item" %>
+                        </divul>
                     </li>
-                    <li class="nav-item">
-                        <%= link_to  "Help", help_path, class: "nav-link" %>
-                    </li>
-                    <li class="nav-item">
-                        <%= link_to  "About", about_path, class: "nav-link" %>
-                    </li>
-                    <li class="nav-item">
-                        <%= link_to  "Log in", "#", class:"nav-link" %>
-                </ul>
-            </div>
+                <% else %>
+                    <li class="nav-item"><%= link_to  "Log in", login_path, class:"nav-link" %></li>
+                <% end %>
+            </ul>
+        </div>
     </div>
 </header>

@@ -8,3 +8,10 @@
 # two:
 #   name: MyString
 #   email: MyString
+
+# fixture files must use spaces not tabs!!!!
+
+Dan:
+  name: Dan Newton
+  email: danknewton@hotmail.com
+  password_digest: <%= User.digest("password") %>

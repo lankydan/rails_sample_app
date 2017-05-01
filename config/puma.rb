@@ -1,3 +1,5 @@
+# commented out code below to run on windows, due to puma not running on windows
+
 workers Integer(ENV["WEB_CONCURRENCY"] || 2)
 threads_count = Integer(ENV["RAILS_MAX_THREADS"] || 5)
 threads threads_count, threads_count
@@ -12,6 +14,7 @@ on_worker_boot do
   ActiveRecord::Base.establish_connection
 end
 
+# ------------------------------------------
 
 # commented out all of below as per tutorial specified, the code is similar but different
 

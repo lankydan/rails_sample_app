@@ -16,6 +16,10 @@ Rails.application.routes.draw do
   # added due to incorrect controller name so I needed to match it to the GET signup_path
   post 'signup', to: 'user#create'
 
+  get "login", to: "sessions#new"
+  post "login", to: "sessions#create"
+  delete "logout", to: "sessions#destroy"
+
   resources :user
 
   root 'static_pages#home'
