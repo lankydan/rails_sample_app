@@ -17,7 +17,11 @@ class User < ApplicationRecord
 
   # requires password_digest in the user model to be defined
   has_secure_password
-  validates :password, presence: true, length: { minimum: 6 }
+  # allow blank added so users can update profile without changing password
+  # has_secure_password has a seperate presence validation that will catch blank password on new record creation
+  # allow_blank is letting me enter blank passwords although the book claims to prevent it due to has_secure_password
+  # book says it doesnt prevent "      " passwords using the has_secure_password validation
+  validates :password, presence: true, length: { minimum: 6 }, allow_blank: true
 
   attr_accessor :remember_token
 

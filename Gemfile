@@ -31,8 +31,9 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-#gem 'sprockets-rails', :require => 'sprockets/railtie'
 gem 'bootstrap', '~> 4.0.0.alpha6'
+gem 'will_paginate'
+gem 'bootstrap-will_paginate'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -53,6 +54,7 @@ group :development do
   gem 'listen', '3.0.8'
   gem 'spring', '1.7.2'
   gem 'spring-watcher-listen', '2.0.0'
+  gem 'faker', '1.6.3'
 end
 
 group :test do

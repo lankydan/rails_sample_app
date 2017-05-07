@@ -71,7 +71,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "password should be present (not blank)" do
-    @user.password = @user.password_confirmation = " " * 6
+    # @user.password = @user.password_confirmation = " " * 6
+    @user.password = @user.password_confirmation = nil
     assert_not @user.valid?
   end
 

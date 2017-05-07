@@ -1,0 +1,23 @@
+<!--Rails knows that a record is new and will send the correct request to the controller
+This is a general page but can send both PATCH and POST requests. If @user.new_record? == true then sens
+PATCH request if false then the user is new and a POST request will be sent-->
+<div class="row">
+  <div class="col-md-6 col-md-offset-3 center_form">
+    <%= form_for(@user) do |f| %>
+      <%= render  "shared/error_messages" %>
+      <%= f.label :name %>
+      <%= f.text_field :name, class: "form-control" %>
+      
+      <%= f.label :email %>
+      <%= f.email_field :email, class:"form-control" %>
+      
+      <%= f.label :password %>
+      <%= f.password_field :password, class: "form-control" %>
+
+      <%= f.label :password_confirmation, "Confirm password" %>
+      <%= f.password_field :password_confirmation, class: "form-control" %>
+
+      <%= f.submit yield(:button_text), class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>

@@ -11,7 +11,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                           password_confirmation: "password"
                                         } }
     follow_redirect!
-    assert_template "user/show"
+    assert_template "users/show"
     end
   end
 
@@ -51,7 +51,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                           password_confirmation: "bar"
                                         } }
     end
-    assert_template "user/new"
+    assert_template "users/new"
   end
 
   test "invalid signup errors are displayed" do
@@ -61,7 +61,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                           password: "foo",
                                           password_confirmation: "foo"
                                         } }
-    assert_template "user/new"
+    assert_template "users/new"
     # selects the id name
     # <div id="error_explanation">
     assert_select "div#error_explanation"
@@ -78,7 +78,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                           password: "password",
                                           password_confirmation: "password"
                                         } }
-    assert_template "user/new"
+    assert_template "users/new"
     assert_select "li", "Email is invalid", count: 1
   end
 
@@ -89,7 +89,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                           password: "foo",
                                           password_confirmation: "foo"
                                         } }
-    assert_template "user/new"
+    assert_template "users/new"
     assert_select "li", "Password is too short (minimum is 6 characters)", count: 1
   end
 
@@ -100,7 +100,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                           password: "password",
                                           password_confirmation: "do not match"
                                         } }
-    assert_template "user/new"
+    assert_template "users/new"
     assert_select "li", "Password confirmation doesn't match Password", count: 1
   end
 
@@ -111,7 +111,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                           password: "foo",
                                           password_confirmation: "bar"
                                         } }
-    assert_template "user/new"
+    assert_template "users/new"
     assert_select "li", "Email is invalid", count: 1
     assert_select "li", "Password is too short (minimum is 6 characters)", count: 1
     assert_select "li", "Password confirmation doesn't match Password", count: 1
