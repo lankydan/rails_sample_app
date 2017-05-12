@@ -21,15 +21,7 @@ Rails.application.routes.draw do
   delete "logout", to: "sessions#destroy"
 
   resources :users
-  # using as: allows me to override the helper paths used
-  # this allows the correction to my controller having the wrong name
-  # so rails can use its normal paths without me needing to specify one each time
-  # resources :users, controller: "user" # need to double check this when refreshing pages
-
-   
-  # ActiveSupport::Inflector.inflections do |inflect|
-  #   inflect.irregular 'user', 'users'
-  # end
+  resources :account_activations, only: [:edit]
 
   root 'static_pages#home'
 

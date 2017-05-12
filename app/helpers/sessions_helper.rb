@@ -30,7 +30,7 @@ module SessionsHelper
       # if the user exists with user_id and its remember_digest matches the hashed version of :remember_token from the cookie
       # then set the @current_user
       # and add the user id to the current session
-      if user && user.authenticated?(cookies[:remember_token])
+      if user && user.authenticated?(:remember, cookies[:remember_token])
         log_in user
         @current_user = user
       end

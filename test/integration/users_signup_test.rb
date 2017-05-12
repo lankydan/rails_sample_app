@@ -2,7 +2,11 @@ require 'test_helper'
 # tests signup page for correct validation
 class UsersSignupTest < ActionDispatch::IntegrationTest
 
-  test "valid signup information" do
+  def setup
+    ActionMailer::Base.deliveries.clear
+  end
+
+  test "valid signup information with valid account activation" do
     get signup_path
     assert_difference "User.count" do
       post signup_path, params: { user: { name:"Dan",
@@ -10,26 +14,66 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                           password: "password",
                                           password_confirmation: "password"
                                         } }
+    end
+    assert_equal 1, ActionMailer::Base.deliveries.size
+    user = assigns(:user)
+    assert_not user.activated?
+    get edit_account_activation_path(user.activation_token, email: user.email)
+    assert user.reload.activated?
     follow_redirect!
     assert_template "users/show"
-    end
+    assert is_logged_in?
+  end
+
+  test "valid signup information with invalid token account activation" do
+    get signup_path
+    post signup_path, params: { user: { name:"Dan",
+                                        email: "user@valid.com",
+                                        password: "password",
+                                        password_confirmation: "password"
+                                      } }
+    assert_equal 1, ActionMailer::Base.deliveries.size
+    user = assigns(:user)
+    assert_not user.activated?
+    get edit_account_activation_path("invalid token", email: user.email)
+    assert_not user.reload.activated?
+    follow_redirect!
+    assert_template "static_pages/home"
+    assert_not is_logged_in?
+  end
+
+  test "valid signup information with wrong email account activation" do
+    get signup_path
+    post signup_path, params: { user: { name:"Dan",
+                                        email: "user@valid.com",
+                                        password: "password",
+                                        password_confirmation: "password"
+                                      } }
+    assert_equal 1, ActionMailer::Base.deliveries.size
+    user = assigns(:user)
+    assert_not user.activated?
+    get edit_account_activation_path(user.activation_token, email: "invalid")
+    assert_not user.reload.activated?
+    follow_redirect!
+    assert_template "static_pages/home"
+    assert_not is_logged_in?
   end
 
   test "valid signup success flash displayed" do
     get signup_path
-    assert_difference "User.count" do
-      post signup_path, params: { user: { name:"Dan",
-                                          email: "user@valid.com",
-                                          password: "password",
-                                          password_confirmation: "password"
-                                        } }
+    post signup_path, params: { user: { name:"Dan",
+                                        email: "user@valid.com",
+                                        password: "password",
+                                        password_confirmation: "password"
+                                      } }
+    user = assigns(:user)
+    get edit_account_activation_path(user.activation_token, email: user.email)
     follow_redirect!
     assert flash.any?
     # makes the code brittle to search for text / :success is in the flash hash
     assert flash.key? :success # checks if :success key exists in the flash hash
     assert_select "div.alert", count: 1
-    assert_select "div.alert-success", "Welcome to the Sample App!", count: 1
-    end
+    assert_select "div.alert-success", "Account activated!", count: 1
   end
 
   test "valid signup user logged in" do
@@ -39,6 +83,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                           password: "password",
                                           password_confirmation: "password"
                                         } }
+    user = assigns(:user)
+    get edit_account_activation_path(user.activation_token, email: user.email)
     assert is_logged_in?
   end
 

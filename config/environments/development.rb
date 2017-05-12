@@ -27,7 +27,12 @@ Rails.application.configure do
   end
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  # changed this to view errors
+  config.action_mailer.raise_delivery_errors = true
+  # added the 3 configs below for sending + previewing emails
+  config.action_mailer.delivery_method = :test
+  host = "localhost:3000"
+  config.action_mailer.default_url_options = { host: host, protocol: "https"}
 
   config.action_mailer.perform_caching = false
 

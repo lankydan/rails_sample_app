@@ -46,7 +46,7 @@ GEM
       tzinfo (~> 1.1)
     ansi (1.5.0)
     arel (8.0.0)
-    autoprefixer-rails (7.0.0)
+    autoprefixer-rails (7.0.1)
       execjs
     bootstrap (4.0.0.alpha6)
       autoprefixer-rails (>= 6.0.3)

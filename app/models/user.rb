@@ -5,6 +5,7 @@ class User < ApplicationRecord
   # This is a callback that gets invoked before_save
   # before_save { self.email = email.downcase } this is equivalent to the below, ! means it changes the email value (said as bang in rails)
   before_save { email.downcase! }
+  before_create :create_activation_digest
 
   # :name = the symbol name
   # presence = cannot be blank
@@ -23,7 +24,7 @@ class User < ApplicationRecord
   # book says it doesnt prevent "      " passwords using the has_secure_password validation
   validates :password, presence: true, length: { minimum: 6 }, allow_blank: true
 
-  attr_accessor :remember_token
+  attr_accessor :remember_token, :activation_token
 
   # Returns the hash digest of the given string
   def User.digest(string)
@@ -53,8 +54,31 @@ class User < ApplicationRecord
   end
 
   # returns true if the given token matches the digest
-  def authenticated?(remember_token)
-    remember_digest && BCrypt::Password.new(remember_digest).is_password?(remember_token)
+  # this method is using meta programming
+  # allows remember_token and activation_token to be compared to respective digests
+  # basicly like having a switch statement / if else which depends on an input parameter
+  # tht describes what it is
+  def authenticated?(attribute, token)
+    # works like reflection in java, method is specified by a string name or :attribute
+    digest = self.send("#{attribute}_digest")
+    digest && BCrypt::Password.new(digest).is_password?(token)
   end
+
+  def activate
+    # basicly the same as update_attributes but without a reload?
+    # replaces the use of multiple update_attribute calls
+    update_columns(activated: true, activated_at: Time.zone.now)
+  end
+
+  def send_activation_email
+    UserMailer.account_activation(self).deliver_now
+  end
+
+  private
+    
+    def create_activation_digest
+      self.activation_token = User.new_token
+      self.activation_digest = User.digest(activation_token)
+    end
 
 end

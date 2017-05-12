@@ -16,15 +16,28 @@ Dan:
   email: danknewton@hotmail.com
   password_digest: <%= User.digest("password") %>
   admin: true
+  activated: true
+  activated_at: Time.zone.now
+
+George:
+  name: George
+  email: George@hotmail.com
+  password_digest: <%= User.digest("password") %>
+  activated: false
+  activated_at: Time.zone.now
 
 Laura:
   name: Laura
   email: laura@hotmail.com
   password_digest: <%= User.digest("password") %>
+  activated: true
+  activated_at: Time.zone.now
 
 <% 30.times do |n| %>
 user_<%= n %>:
   name:  <%= "User #{n}" %>
   email: <%= "user-#{n}@example.com" %>
   password_digest: <%= User.digest("password") %>
+  activated: true
+  activated_at: Time.zone.now
 <% end %>
