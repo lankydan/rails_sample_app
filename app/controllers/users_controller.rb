@@ -16,17 +16,15 @@ class UsersController < ApplicationController
   # User.new(params[:user]) doesnt work since rails 4 due to being insecure
   def create
     @user = User.new(user_params)
-    if @user.save
-      # adding account activation via email
+    if params[:user][:password].empty?
+      @user.errors.add(:password, "can't be empty!")
+      render "new"
+    elsif @user.save
       @user.send_activation_email
       flash[:info] = "Please check your email to activate your account."
       redirect_to root_url
-      # below not needed now activation is handled by email instead of instant activation
-      # log_in @user
-      # flash[:success] = "Welcome to the Sample App!"
-      # redirect_to @user
     else
-      render 'new'
+      render "new"
     end
   end
 
