@@ -1,13 +1,12 @@
 source 'https://rubygems.org'
 
 git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
   "https://github.com/#{repo_name}.git"
 end
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-#gem 'rails', '~> 5.0.2'
+# gem 'rails', '~> 5.0.2'
 gem 'rails', '~> 5.1.0'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
@@ -32,9 +31,14 @@ gem 'jbuilder', '~> 2.5'
 # gem 'bcrypt', '~> 3.1.7'
 
 gem 'bootstrap', '~> 4.0.0.alpha6'
-gem 'will_paginate'
 gem 'bootstrap-will_paginate'
+gem 'will_paginate'
 
+gem 'carrierwave'
+gem 'mini_magick'
+gem 'fog'
+
+# used to mock data in development / production
 gem 'faker', '1.6.3'
 
 # Use Capistrano for deployment
@@ -42,7 +46,7 @@ gem 'faker', '1.6.3'
 
 # bcrypt used to hash passwords to database
 # gem 'bcrypt', '>= 3.1.11' # isnt letting me deploy with this
-gem 'bcrypt', git: 'https://github.com/codahale/bcrypt-ruby.git', :require => 'bcrypt'
+gem 'bcrypt', git: 'https://github.com/codahale/bcrypt-ruby.git', require: 'bcrypt'
 
 group :development, :test do
   gem 'sqlite3'
@@ -65,9 +69,9 @@ group :test do
   gem 'guard-minitest', '2.4.4'
 end
 
-group :production do 
+group :production do
   gem 'pg', '0.18.4'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

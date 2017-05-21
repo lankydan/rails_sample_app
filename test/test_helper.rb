@@ -12,6 +12,11 @@ class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
+  def full_title(page_title = '')
+    base_title = "Ruby on Rails Tutorial Sample App"
+    page_title + " | " + base_title
+  end
+
   # Add more helper methods to be used by all tests here...
   # needed because helper methods are not available to use in tests
   # but ones defined in test_helper.rb can be used

@@ -25,7 +25,9 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_template "users/show"
     assert_select "a[href=?]", login_path, count: 0
     assert_select "a[href=?]", logout_path, count: 1
-    assert_select "a[href=?]", user_path(@user), count: 1
+    assert_select "div.dropdown-menu" do |elements|
+      assert_select "a[href=?]", user_path(@user), count: 1
+    end
     assert is_logged_in?
   end
 
