@@ -19,13 +19,13 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if params[:user][:password].empty?
       @user.errors.add(:password, "can't be empty!")
-      render 'new'
+      render_new
     elsif @user.save
       @user.send_activation_email
       flash[:info] = 'Please check your email to activate your account.'
       redirect_to root_url
     else
-      render 'new'
+      render_new
     end
   end
 
@@ -39,7 +39,7 @@ class UsersController < ApplicationController
       flash[:success] = 'Profile updated!'
       redirect_to @user
     else
-      render 'edit'
+      render_edit
     end
   end
 
@@ -83,4 +83,27 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     redirect_to root_url unless current_user?(@user)
   end
+
+  def render_new
+    if request.xhr?
+      respond_to do |format|
+        format.html { redirect_to signup_url }
+        format.js
+      end
+    else
+      render "new"
+    end
+  end
+
+  def render_edit
+    if request.xhr?
+      respond_to do |format|
+        format.html { redirect_to edit_user_path(@user) }
+        format.js
+      end
+    else
+      render "edit"
+    end
+  end
+
 end

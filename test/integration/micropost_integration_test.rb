@@ -74,4 +74,14 @@ class MicropostIntegrationTest < ActionDispatch::IntegrationTest
     assert_not @user.microposts.first.picture?
   end
 
+  test 'invalid submission with ajax' do
+    log_in_as(@user)
+    get root_url
+    assert_no_difference 'Micropost.count' do
+      post microposts_path, params: { micropost: { content: 'too long' * 50 } }, xhr: true
+    end
+    assert_match "<div id=\\\"error_explanation\\\">", @response.body
+    assert_match "<div class=\\\"alert alert-danger\\\">", @response.body
+  end
+
 end

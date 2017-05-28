@@ -9,8 +9,15 @@ class MicropostsController < ApplicationController
       flash[:success] = 'Post created'
       redirect_to root_url
     else
-      @feed_items = []
-      render 'static_pages/home'
+      # @feed_items is needed if I do not use ajax as the microposts need to be redisplayed
+      # as I am using ajax that part of the screen is not refreshed and therefore
+      # the items will remain what they were before the action was sent
+      if request.xhr?
+        render_root
+      else
+        @feed_items = current_user.feed.paginate(page: params[:page])
+        render "static_pages/home"
+      end
     end
   end
 
@@ -30,5 +37,12 @@ class MicropostsController < ApplicationController
       @micropost = current_user.microposts.find_by(id: params[:id])
       redirect_to root_url if @micropost.nil?
     end
+
+    def render_root
+      respond_to do |format|
+        format.html { redirect_to root_url }
+        format.js
+      end
+  end
 
 end

@@ -3,7 +3,7 @@ This is a general page but can send both PATCH and POST requests. If @user.new_r
 PATCH request if false then the user is new and a POST request will be sent-->
 <div class="row">
   <div class="col-md-6 col-md-offset-3 center_form">
-    <%= form_for(@user) do |f| %>
+    <%= form_for(@user, remote: true) do |f| %>
       <%= render  "shared/error_messages", object: f.object %>
       <%= f.label :name %>
       <%= f.text_field :name, class: "form-control" %>

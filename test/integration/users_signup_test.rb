@@ -7,9 +7,9 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   end
 
   test "valid signup information with valid account activation" do
-    get signup_path
+    get new_user_path
     assert_difference "User.count" do
-      post signup_path, params: { user: { name:"Dan",
+      post users_path, params: { user: { name:"Dan",
                                           email: "user@valid.com",
                                           password: "password",
                                           password_confirmation: "password"
@@ -26,8 +26,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   end
 
   test "valid signup information with invalid token account activation" do
-    get signup_path
-    post signup_path, params: { user: { name:"Dan",
+    get new_user_path
+    post users_path, params: { user: { name:"Dan",
                                         email: "user@valid.com",
                                         password: "password",
                                         password_confirmation: "password"
@@ -43,8 +43,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   end
 
   test "valid signup information with wrong email account activation" do
-    get signup_path
-    post signup_path, params: { user: { name:"Dan",
+    get new_user_path
+    post users_path, params: { user: { name:"Dan",
                                         email: "user@valid.com",
                                         password: "password",
                                         password_confirmation: "password"
@@ -60,8 +60,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   end
 
   test "valid signup success flash displayed" do
-    get signup_path
-    post signup_path, params: { user: { name:"Dan",
+    get new_user_path
+    post users_path, params: { user: { name:"Dan",
                                         email: "user@valid.com",
                                         password: "password",
                                         password_confirmation: "password"
@@ -77,8 +77,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   end
 
   test "valid signup user logged in" do
-    get signup_path
-    post signup_path, params: { user: { name:"Dan",
+    get new_user_path
+    post users_path, params: { user: { name:"Dan",
                                           email: "user@valid.com",
                                           password: "password",
                                           password_confirmation: "password"
@@ -89,9 +89,9 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   end
 
   test "invalid signup information" do
-    get signup_path
+    get new_user_path
     assert_no_difference "User.count" do
-      post signup_path, params: { user: { name:"",
+      post users_path, params: { user: { name:"",
                                           email: "user@invalid",
                                           password: "foo",
                                           password_confirmation: "bar"
@@ -101,13 +101,12 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   end
 
   test "invalid signup errors are displayed" do
-    get signup_path
-    post signup_path, params: { user: { name:"",
+    get new_user_path
+    post users_path, params: { user: { name:"",
                                           email: "user@invalid",
                                           password: "foo",
                                           password_confirmation: "foo"
                                         } }
-    assert_template "users/new"
     # selects the id name
     # <div id="error_explanation">
     assert_select "div#error_explanation"
@@ -118,49 +117,113 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   end
 
   test "invalid email error message" do
-    get signup_path
-    post signup_path, params: { user: { name:"",
+    get new_user_path
+    post users_path, params: { user: { name:"",
                                           email: "user@invalid",
                                           password: "password",
                                           password_confirmation: "password"
                                         } }
-    assert_template "users/new"
     assert_select "li", "Email is invalid", count: 1
   end
 
   test "password is too short error message" do
-    get signup_path
-    post signup_path, params: { user: { name:"",
+    get new_user_path
+    post users_path, params: { user: { name:"",
                                           email: "user@valid.com",
                                           password: "foo",
                                           password_confirmation: "foo"
                                         } }
-    assert_template "users/new"
     assert_select "li", "Password is too short (minimum is 6 characters)", count: 1
   end
 
   test "passwords do not match error message" do
-    get signup_path
-    post signup_path, params: { user: { name:"",
+    get new_user_path
+    post users_path, params: { user: { name:"",
                                           email: "user@valid.com",
                                           password: "password",
                                           password_confirmation: "do not match"
                                         } }
-    assert_template "users/new"
     assert_select "li", "Password confirmation doesn't match Password", count: 1
   end
 
   test "all error messages displayed" do
-    get signup_path
-    post signup_path, params: { user: { name:"",
+    get new_user_path
+    post users_path, params: { user: { name:"",
                                           email: "user@invalid",
                                           password: "foo",
                                           password_confirmation: "bar"
                                         } }
-    assert_template "users/new"
     assert_select "li", "Email is invalid", count: 1
     assert_select "li", "Password is too short (minimum is 6 characters)", count: 1
     assert_select "li", "Password confirmation doesn't match Password", count: 1
+  end
+
+  test "invalid signup information with ajax" do
+    get new_user_path
+    assert_no_difference "User.count" do
+      post users_path, params: { user: { name:"",
+                                          email: "user@invalid",
+                                          password: "foo",
+                                          password_confirmation: "bar"
+                                        } }, xhr: true
+    end
+    assert_template "users/create"
+    assert_template "users/_form"
+    assert_template "shared/_error_messages"
+    # assert_equal "Sign up", @response.body
+  end
+
+  test "invalid signup errors are displayed with ajax" do
+    get new_user_path
+    post users_path, params: { user: { name:"",
+                                          email: "user@invalid",
+                                          password: "foo",
+                                          password_confirmation: "foo"
+                                        } }, xhr: true
+    assert_match "<div id=\\\"error_explanation\\\">", @response.body
+    assert_match "<div class=\\\"alert alert-danger\\\">", @response.body
+  end
+
+  test "invalid email error message with ajax" do
+    get new_user_path
+    post users_path, params: { user: { name:"",
+                                          email: "user@invalid",
+                                          password: "password",
+                                          password_confirmation: "password"
+                                        } }, xhr: true                                
+    assert_match "Email is invalid", @response.body
+  end
+
+  test "password is too short error message with ajax" do
+    get new_user_path
+    post users_path, params: { user: { name:"",
+                                          email: "user@valid.com",
+                                          password: "foo",
+                                          password_confirmation: "foo"
+                                        } }, xhr: true
+    assert_match "Password is too short (minimum is 6 characters)", @response.body
+  end
+
+  test "passwords do not match error message with ajax" do
+    get new_user_path
+    post users_path, params: { user: { name:"",
+                                          email: "user@valid.com",
+                                          password: "password",
+                                          password_confirmation: "do not match"
+                                        } }, xhr: true
+    assert_match "Password confirmation doesn&#39;t match Password", @response.body
+  end
+
+  test "all error messages displayed with ajax" do
+    get new_user_path
+    post users_path, params: { user: { name:"",
+                                          email: "user@invalid",
+                                          password: "foo",
+                                          password_confirmation: "bar"
+                                        } }, xhr: true  
+    assert_match "Email is invalid", @response.body
+    assert_match "Password is too short (minimum is 6 characters)", @response.body
+    assert_match "Password confirmation doesn&#39;t match Password", @response.body
   end
 
 end
